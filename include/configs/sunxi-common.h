@@ -314,7 +314,7 @@
 #undef CONFIG_CMD_NFS
 
 /* I2C */
-#if !defined CONFIG_SUN6I && !defined CONFIG_SUN8I
+#if !defined CONFIG_SUN6I && !defined CONFIG_SUN8I && !defined CONFIG_RED_BRICK
 #define CONFIG_SPL_I2C_SUPPORT
 #endif
 /* No CONFIG_SYS_I2C as we use the non converted mvtwsi driver */
