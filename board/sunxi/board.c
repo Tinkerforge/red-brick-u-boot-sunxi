@@ -196,14 +196,18 @@ void sunxi_board_init(void)
 }
 #endif
 
-#if defined(CONFIG_SPL_OS_BOOT) && defined(CONFIG_AXP209_POWER)
+#ifdef CONFIG_SPL_OS_BOOT
 int spl_start_uboot(void)
 {
+#ifdef CONFIG_AXP209_POWER
 	if (axp209_poweron_by_dc())
 		return 0;
 	axp209_power_button(); /* Clear any pending button event */
 	mdelay(100);
 	return axp209_power_button();
+#else
+	return 0; /* return 0 for loading linux, return 1 for loading u-boot */
+#endif
 }
 #endif
 
