@@ -34,6 +34,14 @@ static int mmc_load_image_raw(struct mmc *mmc, unsigned long sector)
 		return -1;
 	}
 
+#ifdef CONFIG_RED_BRICK
+	/* reading script.bin from sector 80 and saving to RAM location 0x43000000.
+	   size of script.bin is 144 sectors (72kB) */
+	err = mmc->block_dev.block_read(0, 80, 144, (void *)0x43000000);
+	if (err == 0)
+		goto end;
+#endif
+
 	spl_parse_image_header(header);
 
 	/* convert size to sectors - round up */
