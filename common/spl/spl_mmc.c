@@ -64,6 +64,7 @@ end:
 #ifdef CONFIG_SPL_OS_BOOT
 static int mmc_load_image_raw_os(struct mmc *mmc)
 {
+#ifndef CONFIG_RED_BRICK
 	if (!mmc->block_dev.block_read(0,
 				       CONFIG_SYS_MMCSD_RAW_MODE_ARGS_SECTOR,
 				       CONFIG_SYS_MMCSD_RAW_MODE_ARGS_SECTORS,
@@ -73,6 +74,7 @@ static int mmc_load_image_raw_os(struct mmc *mmc)
 #endif
 		return -1;
 	}
+#endif
 
 	return mmc_load_image_raw(mmc, CONFIG_SYS_MMCSD_RAW_MODE_KERNEL_SECTOR);
 }
