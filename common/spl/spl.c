@@ -24,6 +24,28 @@
 #include <asm/io.h>
 #include <asm/gpio.h>
 
+/*
+ * Function for setting output to the
+ * GPIOs of RED-Brick status LEDs
+ */
+static int sunxi_gpio_output(u32 pin, u32 val)
+{
+	u32 dat;
+	u32 bank = GPIO_BANK(pin);
+	u32 num = GPIO_NUM(pin);
+	struct sunxi_gpio *pio = BANK_TO_GPIO(bank);
+
+	dat = readl(&pio->dat);
+	if (val)
+		dat |= 0x1 << num;
+	else
+		dat &= ~(0x1 << num);
+
+	writel(dat, &pio->dat);
+
+	return 0;
+}
+
 DECLARE_GLOBAL_DATA_PTR;
 
 #ifndef CONFIG_SYS_UBOOT_START
@@ -141,10 +163,12 @@ void board_init_r(gd_t *dummy1, ulong dummy2)
 {
 	/* Setting up GPIO for RED-Brick status LEDs */
 #ifdef CONFIG_RED_BRICK
-	/* Running LED */
+	/* Set running LED to output 0 */
 	sunxi_gpio_set_cfgpin(SUNXI_GPC(5), SUNXI_GPIO_OUTPUT);
-	/* Error LED */
+	sunxi_gpio_output(SUNXI_GPC(5), 0);
+	/* Set error LED to output 0 */
 	sunxi_gpio_set_cfgpin(SUNXI_GPC(6), SUNXI_GPIO_OUTPUT);
+	sunxi_gpio_output(SUNXI_GPC(6), 0);
 #endif
 	u32 boot_device;
 	debug(">>spl:board_init_r()\n");
