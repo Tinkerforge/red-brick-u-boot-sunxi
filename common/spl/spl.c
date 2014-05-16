@@ -16,6 +16,13 @@
 #include <image.h>
 #include <malloc.h>
 #include <linux/compiler.h>
+/* 
+ * Includes for RED-Brick
+ * status LED GPIO config
+ */
+#include <common.h>
+#include <asm/io.h>
+#include <asm/gpio.h>
 
 DECLARE_GLOBAL_DATA_PTR;
 
@@ -45,6 +52,7 @@ static bd_t bdata __attribute__ ((section(".data")));
 #ifdef CONFIG_SPL_OS_BOOT
 __weak int spl_start_uboot(void)
 {
+
 	puts("SPL: Please implement spl_start_uboot() for your board\n");
 	puts("SPL: Direct Linux boot not active!\n");
 	return 1;
@@ -131,6 +139,13 @@ static void spl_ram_load_image(void)
 
 void board_init_r(gd_t *dummy1, ulong dummy2)
 {
+	/* Setting up GPIO for RED-Brick status LEDs */
+#ifdef CONFIG_RED_BRICK
+	/* Running LED */
+	sunxi_gpio_set_cfgpin(SUNXI_GPC(5), SUNXI_GPIO_OUTPUT);
+	/* Error LED */
+	sunxi_gpio_set_cfgpin(SUNXI_GPC(6), SUNXI_GPIO_OUTPUT);
+#endif
 	u32 boot_device;
 	debug(">>spl:board_init_r()\n");
 
