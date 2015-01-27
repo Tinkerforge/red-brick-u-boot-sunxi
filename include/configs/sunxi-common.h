@@ -89,7 +89,6 @@
 #ifndef CONFIG_MMC_SUNXI_SLOT
 #define CONFIG_MMC_SUNXI_SLOT		0
 #endif
-#define CONFIG_MMC_SUNXI_USE_DMA
 #define CONFIG_ENV_IS_IN_MMC
 #define CONFIG_SYS_MMC_ENV_DEV		0	/* first detected MMC controller */
 #endif
@@ -422,6 +421,8 @@
     !defined CONFIG_ENV_IS_IN_SPI_FLASH
 #define CONFIG_ENV_IS_NOWHERE
 #endif
+
+#define CONFIG_MISC_INIT_R
 
 #ifndef CONFIG_SPL_BUILD
 #include <config_distro_defaults.h>
